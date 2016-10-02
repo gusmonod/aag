@@ -19,6 +19,7 @@ node_modules
 
 # Compiled files
 dist/*
+public/**/*.min.*
 
 # Personal (sensitive) configurations
 .env

@@ -1,5 +1,5 @@
-import app from '../dist/app';
-import {getComments,} from '../dist/comments';
+import app from '../../dist/server/app';
+import {getComments,} from '../../dist/server/comments';
 
 import _ from 'lodash/fp';
 import request from 'supertest';

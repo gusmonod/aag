@@ -11,7 +11,7 @@ export default app;
 
 app.set('port', process.env.PORT || 3000);
 
-app.use('/', express.static(path.join(__dirname, '..', 'public')));
+app.use('/', express.static(path.join(__dirname, '..', '..', 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true,}));
 
@@ -35,5 +35,5 @@ app.post('/api/comments', async (req, res) => {
 });
 
 app.listen(app.get('port'), () => {
-  logger.info(`Server started: http://localhost: ${app.get('port')}/`);
+  logger.info(`Server started: http://localhost:${app.get('port')}/`);
 });

@@ -14,6 +14,11 @@ const COMMENTS = [
     author: 'いこう',
     text: '私は外人です',
   },
+  {
+    id: 1420070600000,
+    author: 'yet',
+    text: 'another',
+  },
 ];
 
 export const getComments = () => Promise.resolve(COMMENTS);
