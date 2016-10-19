@@ -1,5 +1,5 @@
 {
-  "name": "funcabulary",
+  "name": "aag",
   "version": "0.0.1",
   "description": "Functional reactive vocabulary tester",
   "engines": {
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gusmonod/funcabulary.git"
+    "url": "git+https://github.com/gusmonod/aag.git"
   },
   "author": "Gus Monod",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/gusmonod/funcabulary/issues"
+    "url": "https://github.com/gusmonod/aag/issues"
   },
-  "homepage": "https://github.com/gusmonod/funcabulary#readme",
+  "homepage": "https://github.com/gusmonod/aag#readme",
   "dependencies": {
     "babel-core": "^6.15.0",
     "babel-plugin-transform-runtime": "^6.15.0",
