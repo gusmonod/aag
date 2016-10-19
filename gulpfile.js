@@ -1,4 +1,5 @@
 const argv = require('yargs').argv;
+const ava = require('gulp-ava');
 const babel = require('gulp-babel');
 const babelify = require('babelify');
 const browserify = require('browserify');
@@ -7,6 +8,11 @@ const gulp = require('gulp');
 const gulpif = require('gulp-if');
 const source = require('vinyl-source-stream');
 const uglify = require('gulp-uglify');
+
+gulp.task('test', () =>
+  gulp.src('test/**/*.js')
+    .pipe(ava({verbose: true, nyc: true,}))
+);
 
 gulp.task('build:server', () =>
   gulp.src('src/server/**/*.js')

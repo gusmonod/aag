@@ -1,4 +1,4 @@
-import {getComments, addComment,} from './comments';
+import upload from './upload';
 
 import bodyParser from 'body-parser';
 import express from 'express';
@@ -15,23 +15,16 @@ app.use('/', express.static(path.join(__dirname, '..', '..', 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true,}));
 
-// Additional middleware which will set headers that we need on each request.
-app.use((req, res, next) => {
-  // Set permissive CORS header - this allows this server to be used only as
-  // an API server in conjunction with something like webpack-dev-server.
-  res.setHeader('Access-Control-Allow-Origin', '*');
+app.use('/upload', upload);
 
-  // Disable caching so we'll always get the latest comments.
-  res.setHeader('Cache-Control', 'no-cache');
-  next();
-});
+app.use((err, req, res, next) => {
+  const status = err.statusCode || err.status || 500;
 
-app.get('/api/comments', async (req, res) => {
-  res.json(await getComments());
-});
+  res.status(status);
+  logger.error(err);
 
-app.post('/api/comments', async (req, res) => {
-  res.json(await addComment(req.body));
+  res.end(`Error ${status}: ${err.shortMessage}`);
+  next(err);
 });
 
 app.listen(app.get('port'), () => {
