@@ -7,7 +7,7 @@
     "yarn": "0.15.1"
   },
   "scripts": {
-    "start": "gulp build && node dist/server/app.js",
+    "start": "gulp build && node built/server/app.js",
     "test": "gulp build && nyc ava",
     "lint": "eslint --ignore-path .gitignore ."
   },
