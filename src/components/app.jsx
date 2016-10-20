@@ -59,7 +59,7 @@ export default class App extends React.Component {
       <div>
         <label htmlFor='input-email'>Email&nbsp;:</label>
         <input placeholder='votre email'
-               onChange={this.handleChange}
+               onChange={this.handleChange.bind(this)}
                value={this.state.email}
                type='email' id='input-email' name='input-email' />
         <div className={this.isEmailValid() ? 'hidden' : 'dropzone filepicker'}>
