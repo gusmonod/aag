@@ -1,19 +1,15 @@
 import upload from './upload';
 
-import bodyParser from 'body-parser';
 import express from 'express';
 import logger from 'winston';
-
-import path from 'path';
 
 const app = express();
 export default app;
 
 app.set('port', process.env.PORT || 3000);
 
-app.use('/', express.static(path.join(__dirname, '..', '..', 'public')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true,}));
+logger.remove(logger.transports.Console);
+logger.add(logger.transports.Console, {'timestamp':true,});
 
 app.use('/upload', upload);
 
