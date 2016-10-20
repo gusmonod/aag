@@ -46,7 +46,7 @@ router.post('/', async (req, res, next) => {
         const info = await easyimg.info(file.path);
         await fs.rename(info.path, `${uploadDir}/${file.originalFilename}`);
       } catch (err) {
-        logger.error(err);
+        logger.error(`ip: ${ip} err: ${err}`);
         err.shortMessage = err.message;
         return next(err);
       }

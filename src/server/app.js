@@ -22,7 +22,11 @@ app.use((err, req, res, next) => {
   const status = err.statusCode || err.status || 500;
 
   res.status(status);
-  logger.error(err);
+  const ip = req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress;
+  logger.error(`ip: ${ip} err: ${err}`);
 
   res.end(`Error ${status}: ${err.shortMessage}`);
   next(err);
