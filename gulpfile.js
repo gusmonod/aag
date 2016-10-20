@@ -20,7 +20,7 @@ gulp.task('build:server', () =>
       presets: ['es2015', 'es2017',],
       plugins: ['transform-runtime',],
     }))
-    .pipe(gulp.dest('dist/server'))
+    .pipe(gulp.dest('built/server'))
 );
 
 gulp.task('build:components', () =>
