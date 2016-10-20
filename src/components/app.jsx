@@ -25,8 +25,8 @@ export default class App extends React.Component {
     };
 
     this.eventHandlers = {
-      sending: this.sending,
-      success: this.success,
+      sending: this.sending.bind(this),
+      success: this.success.bind(this),
     };
 
     this.state = {
