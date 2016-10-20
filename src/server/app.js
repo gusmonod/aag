@@ -13,7 +13,8 @@ logger.add(logger.transports.Console, {'timestamp':true,});
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://angeleandgus.com');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Methods', 'POST');
+  res.header('Access-Control-Allow-Headers', '*');
 
   next();
 });
