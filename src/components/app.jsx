@@ -12,8 +12,8 @@ export default class App extends React.Component {
       addRemoveLinks: false,
       acceptedFiles: 'image/*',
       dictDefaultMessage: 'Glissez vos images dans cette zone ou cliquez pour les envoyer',
-      maxFilesize: 5 * 1024,  // 5 GiB
-      filesizeBase: 1024,
+      maxFilesize: 5,  // 5 MB
+      filesizeBase: 1000,
       uploadMultiple: true,
       parallelUploads: 5,
     };
@@ -21,15 +21,17 @@ export default class App extends React.Component {
     this.componentConfig = {
       iconFiletypes: ['.jpg', '.png', '.gif', '.tiff', '.*',],
       showFiletypeIcon: true,
-      postUrl: '/upload',
+      postUrl: 'http://52.210.28.189:3000/upload',
     };
 
     this.eventHandlers = {
-      sending: this.sending.bind(this),
+      sending: this.sending,
+      success: this.success,
     };
 
     this.state = {
       email: '',
+      nbSent: 0,
     };
   }
 
@@ -46,24 +48,30 @@ export default class App extends React.Component {
     formData.set('email', this.state.email);
   }
 
-  render() {
-    const config = this.componentConfig;
-    const djsConfig = this.djsConfig;
-    const eventHandlers = this.eventHandlers;
+  success() {
+    const plural = this.state.nbSent ? 's' : '';
+    document.getElementById('upload-success-message')
+        .innerText = `${++this.state.nbSent} image${plural} envoyée${plural} avec succès`;
+  }
 
+  render() {
     return (
       <div>
         <label htmlFor='input-email'>Email&nbsp;:</label>
-        <input placeholder='votre email'
-               onChange={this.handleChange.bind(this)}
-               value={this.state.email}
-               type='email' id='input-email' name='input-email' />
         <div className={this.isEmailValid() ? 'hidden' : 'dropzone filepicker'}>
-          <div className='dz-message'>Saisissez votre email</div>
+          <div className='dz-message'>Pour envoyer vos photos, saisissez votre email, on pourra vous remercier&nbsp;!</div>
+          <input placeholder='votre email'
+                 onChange={this.handleChange}
+                 value={this.state.email}
+                 type='email' id='input-email' name='input-email' />
         </div>
         <div className={this.isEmailValid() ? '' : 'hidden'}>
-          <DropzoneComponent config={config} djsConfig={djsConfig}
-                             eventHandlers={eventHandlers} />
+          <DropzoneComponent
+              config={this.componentConfig}
+              djsConfig={this.djsConfig}
+              eventHandlers={this.eventHandlers}>
+            <div id='upload-success-message' className='message'></div>
+          </DropzoneComponent>
         </div>
       </div>
     );

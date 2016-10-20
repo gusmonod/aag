@@ -25,7 +25,7 @@ router.post('/', async (req, res, next) => {
     req.connection.socket.remoteAddress;
 
   const form = new multiparty.Form({
-    maxFilesSize: 5 * 1024 * 1024 * 1024,  // 5 GiB
+    maxFilesSize: 5000000,  // 5 MB
   });
 
   try {
