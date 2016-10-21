@@ -45,9 +45,9 @@ router.post('/', async (req, res, next) => {
     for (let [file,] of Object.values(files)) {
       try {
         const info = await easyimg.info(file.path);
-        const lastModified = await easyimg.exec(`identify -format "%[date:modify]" "${file.path}"`);
-        const unaccepted = /[^a-zA-Z0-9\/@.-]/g;
-        const destFilePath = `${uploadDir}/${lastModified}-${file.originalFilename.replace(unaccepted, '.')}`;
+        const lastModified = new Date(fields.lastModifiedTs * 1000).toISOString();
+        const unaccepted = /[^a-zA-Z0-9-]/g;
+        const destFilePath = `${uploadDir}/${lastModified}-${file.originalFilename.replace(unaccepted, '-')}`;
         logger.info(`creating: ${destFilePath}`);
         await fs.rename(info.path, destFilePath);
       } catch (err) {
