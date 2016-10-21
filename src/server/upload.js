@@ -25,7 +25,8 @@ router.post('/', async (req, res, next) => {
     req.connection.socket.remoteAddress;
 
   const form = new multiparty.Form({
-    maxFilesSize: 5000000,  // 5 MB
+    autoFiles: true,
+    maxFilesSize: 25000000,  // 5 files of 5 MB max each
   });
 
   try {
@@ -44,7 +45,11 @@ router.post('/', async (req, res, next) => {
     for (let [file,] of Object.values(files)) {
       try {
         const info = await easyimg.info(file.path);
-        await fs.rename(info.path, `${uploadDir}/${file.originalFilename}`);
+        const lastModified = await easyimg.exec(`identify -format "%[date:modify]" "${file.path}"`);
+        const unaccepted = /[^a-zA-Z0-9\/@.-]/g;
+        const destFilePath = `${uploadDir}/${lastModified}-${file.originalFilename.replace(unaccepted, '.')}`;
+        logger.info(`creating: ${destFilePath}`);
+        await fs.rename(info.path, destFilePath);
       } catch (err) {
         logger.error(`ip: ${ip} err: ${err}`);
         err.shortMessage = err.message;
