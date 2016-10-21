@@ -31,12 +31,16 @@ router.post('/', async (req, res, next) => {
   try {
     const [fields, files,] = await form.parseAsync(req);
 
-    const uploadDir = `uploaded/${fields.email}/${ip}`;
+    const [email,] = fields.email;
+    const [lastModifiedMilliTs,] = fields.lastModifiedMilliTs;
+    const lastModified = new Date(parseInt(lastModifiedMilliTs, 10)).toISOString();
+    const unacceptedChars = /[^a-zA-Z0-9-]/g;
+    const uploadDir = `uploaded/${email}/${ip}`;
     await mkdirp(uploadDir);
 
-    if (!emailRegex.test(fields.email)) {
-      const err = new Error(`Invalid email: ${fields.email}`);
-      err.email = fields.email;
+    if (!emailRegex.test(email)) {
+      const err = new Error(`Invalid email: ${email}`);
+      err.email = email;
       err.statusCode = 400;  // Bad request
       throw err;
     }
@@ -44,11 +48,7 @@ router.post('/', async (req, res, next) => {
     for (let [file,] of Object.values(files)) {
       try {
         const info = await easyimg.info(file.path);
-        logger.info(require('util').inspect(fields, { depth: null, }));
-        logger.info(parseInt(fields.lastModifiedTs, 10));
-        const lastModified = new Date(parseInt(fields.lastModifiedTs, 10) * 1000).toISOString();
-        const unaccepted = /[^a-zA-Z0-9-]/g;
-        const destFilePath = `${uploadDir}/${lastModified}-${file.originalFilename.replace(unaccepted, '-')}`;
+        const destFilePath = `${uploadDir}/${lastModified}-${file.originalFilename.replace(unacceptedChars, '-')}`;
         logger.info(`creating: ${destFilePath}`);
         await fs.rename(info.path, destFilePath);
       } catch (err) {
