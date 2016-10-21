@@ -34,7 +34,7 @@ router.post('/', async (req, res, next) => {
     const [email,] = fields.email;
     const [lastModifiedMilliTs,] = fields.lastModifiedMilliTs;
     const lastModified = new Date(parseInt(lastModifiedMilliTs, 10)).toISOString();
-    const unacceptedChars = /[^a-zA-Z0-9-]/g;
+    const unacceptedChars = /[^a-zA-Z0-9.-]/g;
     const uploadDir = `uploaded/${email}/${ip}`;
     await mkdirp(uploadDir);
 
