@@ -44,7 +44,7 @@ router.post('/', async (req, res, next) => {
     for (let [file,] of Object.values(files)) {
       try {
         const info = await easyimg.info(file.path);
-        logger.info(fields.lastModifiedTs);
+        logger.info(require('util').inspect(fields, { depth: null, }));
         logger.info(parseInt(fields.lastModifiedTs, 10));
         const lastModified = new Date(parseInt(fields.lastModifiedTs, 10) * 1000).toISOString();
         const unaccepted = /[^a-zA-Z0-9-]/g;
