@@ -12,6 +12,12 @@ export default class App extends React.Component {
       addRemoveLinks: false,
       acceptedFiles: 'image/*',
       dictDefaultMessage: 'Glissez vos images dans cette zone ou cliquez pour les envoyer',
+      dictFileTooBig: 'Image trop grande ({{filesize}}Mo). Taill max: {{maxFilesize}}Mo.',
+      dictFallbackMessage: 'Votre navigateur ne supporte pas le téléversement avec glissement.',
+      dictFallbackText: 'Veuillez utiliser le formulaire de remplacement ci-dessous pour transférer vos fichiers comme au bon vieux temps.',
+      dictInvalidFileType: 'Impossible de téléverser un fichier de ce type.',
+      dictResponseError: 'Le serveur a répondu avec le code {{statusCode}}.',
+      dictMaxFilesExceeded: 'Vous ne pouvez pas téléverser plus de fichiers.',
       maxFilesize: 5,  // 5 MB
       filesizeBase: 1000,
       uploadMultiple: true,
