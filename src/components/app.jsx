@@ -12,9 +12,9 @@ export default class App extends React.Component {
       addRemoveLinks: false,
       acceptedFiles: 'image/*',
       dictDefaultMessage: 'Glissez vos images dans cette zone ou cliquez pour les envoyer',
-      dictFileTooBig: 'Image trop grande ({{filesize}}Mo). Taill max: {{maxFilesize}}Mo.',
+      dictFileTooBig: 'Image trop grande ({{filesize}}Mo). Taille max: {{maxFilesize}}Mo.',
       dictFallbackMessage: 'Votre navigateur ne supporte pas le téléversement avec glissement.',
-      dictFallbackText: 'Veuillez utiliser le formulaire de remplacement ci-dessous pour transférer vos fichiers comme au bon vieux temps.',
+      dictFallbackText: 'Veuillez utiliser le bouton de remplacement ci-dessous pour transférer vos fichiers comme au bon vieux temps.',
       dictInvalidFileType: 'Impossible de téléverser un fichier de ce type.',
       dictResponseError: 'Le serveur a répondu avec le code {{statusCode}}.',
       dictMaxFilesExceeded: 'Vous ne pouvez pas téléverser plus de fichiers.',
@@ -64,11 +64,16 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <label htmlFor='input-email'>Email&nbsp;:</label>
-        <input placeholder='votre email'
+        <input placeholder='Email'
                onChange={this.handleChange.bind(this)}
                value={this.state.email}
-               type='email' id='input-email' name='input-email' />
+               type='email' id='input-email' name='input-email'
+               style={{
+                 'width': '20%',
+                 'marginBottom': 10,
+                 'marginLeft': '40%',
+                 'marginRight': '40%',
+               }} />
         <div className={this.isEmailValid() ? 'hidden' : 'dropzone filepicker'}>
           <div className='dz-message'>Pour envoyer vos photos, saisissez votre email, on pourra vous remercier&nbsp;!</div>
         </div>
