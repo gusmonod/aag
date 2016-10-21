@@ -18,7 +18,6 @@ export default router;
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 router.post('/', async (req, res, next) => {
-  // logger.info(`req #${NB}: ${require('util').inspect(req, {depth: null})}`);
   const ip = req.headers['x-forwarded-for'] ||
     req.connection.remoteAddress ||
     req.socket.remoteAddress ||
@@ -45,7 +44,9 @@ router.post('/', async (req, res, next) => {
     for (let [file,] of Object.values(files)) {
       try {
         const info = await easyimg.info(file.path);
-        const lastModified = new Date(fields.lastModifiedTs * 1000).toISOString();
+        logger.info(fields.lastModifiedTs);
+        logger.info(parseInt(fields.lastModifiedTs, 10));
+        const lastModified = new Date(parseInt(fields.lastModifiedTs, 10) * 1000).toISOString();
         const unaccepted = /[^a-zA-Z0-9-]/g;
         const destFilePath = `${uploadDir}/${lastModified}-${file.originalFilename.replace(unaccepted, '-')}`;
         logger.info(`creating: ${destFilePath}`);
