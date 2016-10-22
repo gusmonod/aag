@@ -69,10 +69,10 @@ export default class App extends React.Component {
                value={this.state.email}
                type='email' id='input-email' name='input-email'
                style={{
-                 'width': '20%',
+                 'width': '50%',
                  'marginBottom': 10,
-                 'marginLeft': '40%',
-                 'marginRight': '40%',
+                 'marginLeft': '25%',
+                 'marginRight': '25%',
                }} />
         <div className={this.isEmailValid() ? 'hidden' : 'dropzone filepicker'}>
           <div className='dz-message'>Pour envoyer vos photos, saisissez votre email, on pourra vous remercier&nbsp;!</div>
