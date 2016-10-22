@@ -51,8 +51,8 @@ export default class App extends React.Component {
   }
 
   sending(file, xhr, formData) {
-    formData.set('email', this.state.email);
-    formData.set('lastModifiedMilliTs', file.lastModified);
+    formData.append('email', this.state.email);
+    formData.append('lastModifiedMilliTs', file.lastModified);
   }
 
   success() {
