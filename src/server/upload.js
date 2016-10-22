@@ -1,6 +1,7 @@
 import easyimg from 'easyimage';
 import logger from 'winston';
 import mkdirpCb from 'mkdirp';
+import moment from 'moment';
 import multipartyCb from 'multiparty';
 import Promise from 'bluebird';
 import promiseRouter from 'express-promise-router';
@@ -17,6 +18,17 @@ export default router;
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+const getLastModified = async (i, fields, file) => {
+  const lastModifiedMilliTs = fields.lastModifiedMilliTs[i];
+  if (lastModifiedMilliTs) {
+    return moment(parseInt(lastModifiedMilliTs, 10)).format('YYYY-MM-DD_HH.mm.ss');
+  }
+  else {
+    const date = await easyimg.exec(`identify -format "%[exif:DateTime]" ${file.path}`);
+    return moment(date, 'YYYY:MM:DD HH:mm:ss').format('YYYY-MM-DD_HH.mm.ss');
+  }
+};
+
 router.post('/', async (req, res, next) => {
   const ip = req.headers['x-forwarded-for'] ||
     req.connection.remoteAddress ||
@@ -31,9 +43,9 @@ router.post('/', async (req, res, next) => {
   try {
     const [fields, files,] = await form.parseAsync(req);
 
+    logger.info(fields);
+
     const [email,] = fields.email;
-    const [lastModifiedMilliTs,] = fields.lastModifiedMilliTs;
-    const lastModified = new Date(parseInt(lastModifiedMilliTs, 10)).toISOString();
     const unacceptedChars = /[^a-zA-Z0-9.-]/g;
     const uploadDir = `uploaded/${email}/${ip}`;
     await mkdirp(uploadDir);
@@ -45,16 +57,21 @@ router.post('/', async (req, res, next) => {
       throw err;
     }
 
+    let i = 0;
     for (let [file,] of Object.values(files)) {
       try {
         const info = await easyimg.info(file.path);
-        const destFilePath = `${uploadDir}/${lastModified}-${file.originalFilename.replace(unacceptedChars, '-')}`;
+        const lastModified = await getLastModified(i, fields, file);
+        const sanitizedName = file.originalFilename.replace(unacceptedChars, '-');
+        const destFilePath = `${uploadDir}/${lastModified}_${sanitizedName}`;
         logger.info(`creating: ${destFilePath}`);
         await fs.rename(info.path, destFilePath);
       } catch (err) {
         logger.error(`ip: ${ip} err: ${err}`);
         err.shortMessage = err.message;
         return next(err);
+      } finally {
+        ++i;
       }
     }
 
@@ -66,7 +83,7 @@ router.post('/', async (req, res, next) => {
     case 415:
       return;  // Ignore Unsupported Media Type
     case 413:  // Payload too large
-      err.shortMessage = 'Image trop grande';
+      err.shortMessage = 'Lot d\'images trop grand';
       break;
     case 400:  // Bad request
       err.shortMessage = `Email non valide: ${err.email}`;
