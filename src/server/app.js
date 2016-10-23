@@ -1,6 +1,8 @@
 import upload from './upload';
 
 import express from 'express';
+import fs from 'fs';
+import https from 'https';
 import logger from 'winston';
 
 const app = express();
@@ -35,6 +37,7 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-app.listen(app.get('port'), () => {
-  logger.info(`Server started: http://localhost:${app.get('port')}/`);
-});
+https.createServer({
+  key: fs.readFileSync('/etc/letsencrypt/live/angeleandgus.tk/privkey.pem', 'utf8'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/angeleandgus.tk/cert.pem', 'utf8'),
+}, app).listen(443);
