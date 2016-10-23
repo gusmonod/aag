@@ -8,7 +8,7 @@ import logger from 'winston';
 const app = express();
 export default app;
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 443);
 
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {'timestamp':true,});
@@ -40,4 +40,4 @@ app.use((err, req, res, next) => {
 https.createServer({
   key: fs.readFileSync('/etc/letsencrypt/live/angeleandgus.tk/privkey.pem', 'utf8'),
   cert: fs.readFileSync('/etc/letsencrypt/live/angeleandgus.tk/cert.pem', 'utf8'),
-}, app).listen(443);
+}, app).listen(app.get('port'));
