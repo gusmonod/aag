@@ -18,14 +18,20 @@ export default router;
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const getLastModified = async (i, fields, file) => {
-  const lastModifiedMilliTs = fields.lastModifiedMilliTs[i];
-  if (lastModifiedMilliTs) {
-    return moment(parseInt(lastModifiedMilliTs, 10)).format('YYYY-MM-DD_HH.mm.ss');
-  }
-  else {
-    const date = await easyimg.exec(`identify -format "%[exif:DateTime]" ${file.path}`);
-    return moment(date, 'YYYY:MM:DD HH:mm:ss').format('YYYY-MM-DD_HH.mm.ss');
+const getLastModified = async (filename) => {
+  const dateStrings = await easyimg.exec(`identify -format "%[exif:DateTime*]" ${filename}`);
+  const dates = [];
+
+  dateStrings.split('\n').forEach(dateString => {
+    if (dateString.length > 0) {
+      dates.push(moment(dateString, 'YYYY:MM:DD HH:mm:ss'));
+    }
+  });
+
+  if (dates.length > 0) {
+    return moment.min(dates).format('YYYY-MM-DD_HH.mm.ss');
+  } else {
+    return 'unknown';
   }
 };
 
