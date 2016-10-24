@@ -63,11 +63,10 @@ router.post('/', async (req, res, next) => {
       throw err;
     }
 
-    let i = 0;
     for (let [file,] of Object.values(files)) {
       try {
         const info = await easyimg.info(file.path);
-        const lastModified = await getLastModified(i, fields, file);
+        const lastModified = await getLastModified(file.path);
         const sanitizedName = file.originalFilename.replace(unacceptedChars, '-');
         const destFilePath = `${uploadDir}/${lastModified}_${sanitizedName}`;
         logger.info(`creating: ${destFilePath}`);
@@ -76,8 +75,6 @@ router.post('/', async (req, res, next) => {
         logger.error(`ip: ${ip} err: ${err}`);
         err.shortMessage = err.message;
         return next(err);
-      } finally {
-        ++i;
       }
     }
 
