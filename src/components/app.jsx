@@ -27,7 +27,7 @@ export default class App extends React.Component {
     this.componentConfig = {
       iconFiletypes: ['.jpg', '.png', '.gif', '.tiff', '.*',],
       showFiletypeIcon: true,
-      postUrl: 'http://52.210.28.189:3000/upload',
+      postUrl: 'https://angeleandgus.tk/upload',
     };
 
     this.eventHandlers = {
